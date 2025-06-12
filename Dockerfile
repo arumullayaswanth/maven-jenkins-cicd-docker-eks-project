@@ -147,15 +147,26 @@ RUN wget https://archive.apache.org/dist/tomcat/tomcat-9/v${TOMCAT_VERSION}/bin/
 ENV CATALINA_HOME=/opt/tomcat
 ENV PATH=$CATALINA_HOME/bin:$PATH
 
-# ✅ Add admin user for Manager GUI
+# ✅ Create admin user for Manager GUI access
 RUN echo '<tomcat-users>\n\
-<role rolename="manager-gui"/>\n\
-<user username="admin" password="admin" roles="manager-gui"/>\n\
+  <role rolename="manager-gui"/>\n\
+  <role rolename="admin-gui"/>\n\
+  <role rolename="manager-script"/>\n\
+  <user username="admin" password="admin" roles="manager-gui,manager-script,admin-gui"/>\n\
 </tomcat-users>' > $CATALINA_HOME/conf/tomcat-users.xml
 
 # ✅ Allow access to Manager from any IP (remove localhost restriction)
-RUN sed -i '/<Context>/a \  <Valve className="org.apache.catalina.valves.RemoteAddrValve" allow=".*" />' $CATALINA_HOME/webapps/manager/META-INF/context.xml
 
+RUN sed -i 's/className="org.apache.catalina.valves.RemoteAddrValve" allow="127\.\d+\.\d+\.\d+|::1"/className="org.apache.catalina.valves.RemoteAddrValve" allow=".*"/' \
+    $CATALINA_HOME/webapps/manager/META-INF/context.xml || true
+
+RUN sed -i 's/className="org.apache.catalina.valves.RemoteAddrValve" allow="127\.\d+\.\d+\.\d+|::1"/className="org.apache.catalina.valves.RemoteAddrValve" allow=".*"/' \
+    $CATALINA_HOME/webapps/host-manager/META-INF/context.xml || true
+
+RUN sed -i 's/className="org.apache.catalina.valves.RemoteAddrValve" allow="127\.\d+\.\d+\.\d+|::1"/className="org.apache.catalina.valves.RemoteAddrValve" allow=".*"/' \
+    $CATALINA_HOME/webapps/docs/META-INF/context.xml || true
+
+    
 # Expose port
 EXPOSE 8080
 
