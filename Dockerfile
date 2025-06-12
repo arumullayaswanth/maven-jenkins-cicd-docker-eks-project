@@ -89,13 +89,19 @@
 
 #----------------maven and tomcate on ubuntu ------------------------
 
-# Use the official Ubuntu image as the base image for building the Maven project
+
+
+
+
+
+
+
+# === Stage 1: Build Java WAR using Maven ===
 FROM ubuntu:20.04 AS build
 
-# Set non-interactive mode for installing packages
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install necessary packages: OpenJDK 11, Maven, and other utilities
+# Install Java, Maven, and build tools
 RUN apt-get update && apt-get install -y \
     openjdk-11-jdk \
     maven \
@@ -104,52 +110,54 @@ RUN apt-get update && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-# Set JAVA_HOME environment variable
+# Set environment variables
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+ENV PATH=$JAVA_HOME/bin:$PATH
 
-# Set the working directory in the container
 WORKDIR /app
 
-# Copy the project files into the container
+# Copy project files and build
 COPY . .
-
-# Build the project using Maven
 RUN mvn clean package
 
-# Debug: List the contents of the target directory to confirm the WAR file
+# Optional: verify WAR output
 RUN ls -al /app/webapp/target
-# Use the official Ubuntu image as the base for the runtime environment
+
+
+# === Stage 2: Runtime environment with Tomcat ===
 FROM ubuntu:20.04
 
-# Set environment variables
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install necessary packages
+# Install Java and basic tools
 RUN apt-get update && apt-get install -y \
     openjdk-11-jdk \
     wget \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Set the Java environment variables
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 ENV PATH=$JAVA_HOME/bin:$PATH
 
-# Download and extract Tomcat (correcting the download and extraction paths)
-RUN wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.95/bin/apache-tomcat-9.0.95.tar.gz -O /tmp/tomcat.tar.gz && \
+# ✅ FIXED: Use Apache archive to get Tomcat 9.0.95
+ENV TOMCAT_VERSION=9.0.95
+
+RUN wget https://archive.apache.org/dist/tomcat/tomcat-9/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz -O /tmp/tomcat.tar.gz && \
     mkdir /opt/tomcat && \
     tar xzvf /tmp/tomcat.tar.gz -C /opt/tomcat --strip-components=1 && \
     rm /tmp/tomcat.tar.gz
 
-# Set up Tomcat environment variables
+# Set Tomcat environment variables
 ENV CATALINA_HOME=/opt/tomcat
 ENV PATH=$CATALINA_HOME/bin:$PATH
 
-# Expose Tomcat port
+# Expose default Tomcat port
 EXPOSE 8080
 
-# Copy the generated WAR file from the build stage
-COPY --from=build /app/webapp/target/webapp.war /opt/tomcat/webapps/webapp.war
-# Start Tomcat
-CMD ["/opt/tomcat/bin/catalina.sh", "run"]
+# ✅ Copy WAR from build stage
+COPY --from=build /app/webapp/target/webapp.war $CATALINA_HOME/webapps/webapp.war
+
+# ✅ Start Tomcat
+CMD ["catalina.sh", "run"]
+
 
