@@ -1,27 +1,28 @@
-apiVersion: apps/v1 
+# -----------------------------
+# Deployment for regapp
+# -----------------------------
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: regapp-deployment
-  labels: 
-     app: regapp
-
+  labels:
+    app: regapp
 spec:
-  replicas: 2 
+  replicas: 2
   selector:
     matchLabels:
       app: regapp
-
   template:
     metadata:
       labels:
         app: regapp
     spec:
       containers:
-      - name: regapp
-        image: 421954350274.dkr.ecr.us-east-1.amazonaws.com/demo
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 8080
+        - name: regapp
+          image: 421954350274.dkr.ecr.us-east-1.amazonaws.com/demo:53  # 🐳 Add explicit tag
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -29,18 +30,20 @@ spec:
       maxUnavailable: 1
 
 ---
+
+# -----------------------------
+# LoadBalancer Service
+# -----------------------------
 apiVersion: v1
 kind: Service
 metadata:
   name: regapp-service
   labels:
-    app: regapp 
+    app: regapp
 spec:
   selector:
-    app: regapp 
-
+    app: regapp
   ports:
-    - port: 8080
-      targetPort: 8080
-
+    - port: 80          # 💡 Make this 80 to expose outside users easily
+      targetPort: 8080  # 🔁 Container port inside the pod
   type: LoadBalancer
