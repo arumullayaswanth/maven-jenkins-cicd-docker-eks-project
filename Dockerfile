@@ -91,11 +91,6 @@
 
 
 
-
-
-
-
-
 # === Stage 1: Build Java WAR using Maven ===
 FROM ubuntu:20.04 AS build
 
@@ -124,12 +119,12 @@ RUN mvn clean package
 RUN ls -al /app/webapp/target
 
 
-# === Stage 2: Runtime environment with Tomcat ===
+# === Stage 2: Runtime environment with Tomcat and Manager Access ===
 FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install Java and basic tools
+# Install Java
 RUN apt-get update && apt-get install -y \
     openjdk-11-jdk \
     wget \
@@ -139,9 +134,10 @@ RUN apt-get update && apt-get install -y \
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 ENV PATH=$JAVA_HOME/bin:$PATH
 
-# ✅ FIXED: Use Apache archive to get Tomcat 9.0.95
+# Tomcat version
 ENV TOMCAT_VERSION=9.0.95
 
+# Download and extract Tomcat
 RUN wget https://archive.apache.org/dist/tomcat/tomcat-9/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz -O /tmp/tomcat.tar.gz && \
     mkdir /opt/tomcat && \
     tar xzvf /tmp/tomcat.tar.gz -C /opt/tomcat --strip-components=1 && \
@@ -151,13 +147,20 @@ RUN wget https://archive.apache.org/dist/tomcat/tomcat-9/v${TOMCAT_VERSION}/bin/
 ENV CATALINA_HOME=/opt/tomcat
 ENV PATH=$CATALINA_HOME/bin:$PATH
 
-# Expose default Tomcat port
+# ✅ Add admin user for Manager GUI
+RUN echo '<tomcat-users>\n\
+<role rolename="manager-gui"/>\n\
+<user username="admin" password="admin" roles="manager-gui"/>\n\
+</tomcat-users>' > $CATALINA_HOME/conf/tomcat-users.xml
+
+# ✅ Allow access to Manager from any IP (remove localhost restriction)
+RUN sed -i '/<Context>/a \  <Valve className="org.apache.catalina.valves.RemoteAddrValve" allow=".*" />' $CATALINA_HOME/webapps/manager/META-INF/context.xml
+
+# Expose port
 EXPOSE 8080
 
-# ✅ Copy WAR from build stage
+# ✅ Copy WAR file to webapps folder
 COPY --from=build /app/webapp/target/webapp.war $CATALINA_HOME/webapps/webapp.war
 
-# ✅ Start Tomcat
+# Start Tomcat
 CMD ["catalina.sh", "run"]
-
-
