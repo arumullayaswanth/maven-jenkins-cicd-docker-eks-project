@@ -96,7 +96,6 @@ FROM ubuntu:20.04 AS build
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install Java, Maven, and build tools
 RUN apt-get update && apt-get install -y \
     openjdk-11-jdk \
     maven \
@@ -105,26 +104,19 @@ RUN apt-get update && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-# Set environment variables
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 ENV PATH=$JAVA_HOME/bin:$PATH
 
 WORKDIR /app
 
-# Copy project files and build
 COPY . .
 RUN mvn clean package
 
-# Optional: verify WAR output
-RUN ls -al /app/webapp/target
-
-
-# === Stage 2: Runtime environment with Tomcat and Manager Access ===
+# === Stage 2: Runtime with Tomcat and Manager GUI ===
 FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install Java
 RUN apt-get update && apt-get install -y \
     openjdk-11-jdk \
     wget \
@@ -136,42 +128,33 @@ ENV PATH=$JAVA_HOME/bin:$PATH
 
 # Tomcat version
 ENV TOMCAT_VERSION=9.0.95
-
-# Download and extract Tomcat
-RUN wget https://archive.apache.org/dist/tomcat/tomcat-9/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz -O /tmp/tomcat.tar.gz && \
-    mkdir /opt/tomcat && \
-    tar xzvf /tmp/tomcat.tar.gz -C /opt/tomcat --strip-components=1 && \
-    rm /tmp/tomcat.tar.gz
-
-# Set Tomcat environment variables
 ENV CATALINA_HOME=/opt/tomcat
 ENV PATH=$CATALINA_HOME/bin:$PATH
 
-# ✅ Create admin user for Manager GUI access
-RUN echo '<tomcat-users>\n\
-  <role rolename="manager-gui"/>\n\
-  <role rolename="admin-gui"/>\n\
-  <role rolename="manager-script"/>\n\
-  <user username="admin" password="admin" roles="manager-gui,manager-script,admin-gui"/>\n\
-</tomcat-users>' > $CATALINA_HOME/conf/tomcat-users.xml
+# Download and setup Tomcat
+RUN wget https://archive.apache.org/dist/tomcat/tomcat-9/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz -O /tmp/tomcat.tar.gz && \
+    mkdir -p $CATALINA_HOME && \
+    tar xzvf /tmp/tomcat.tar.gz -C $CATALINA_HOME --strip-components=1 && \
+    rm /tmp/tomcat.tar.gz
 
-# ✅ Allow access to Manager from any IP (remove localhost restriction)
+# ✅ Setup Tomcat users for GUI access
+RUN echo '<tomcat-users>' > $CATALINA_HOME/conf/tomcat-users.xml && \
+    echo '  <role rolename="manager-gui"/>' >> $CATALINA_HOME/conf/tomcat-users.xml && \
+    echo '  <role rolename="admin-gui"/>' >> $CATALINA_HOME/conf/tomcat-users.xml && \
+    echo '  <role rolename="manager-script"/>' >> $CATALINA_HOME/conf/tomcat-users.xml && \
+    echo '  <user username="admin" password="admin" roles="manager-gui,admin-gui,manager-script"/>' >> $CATALINA_HOME/conf/tomcat-users.xml && \
+    echo '</tomcat-users>' >> $CATALINA_HOME/conf/tomcat-users.xml
 
-RUN sed -i 's/className="org.apache.catalina.valves.RemoteAddrValve" allow="127\.\d+\.\d+\.\d+|::1"/className="org.apache.catalina.valves.RemoteAddrValve" allow=".*"/' \
-    $CATALINA_HOME/webapps/manager/META-INF/context.xml || true
+# ✅ Remove IP restrictions in context.xml files
+RUN sed -i '/<Valve className="org.apache.catalina.valves.RemoteAddrValve"/d' $CATALINA_HOME/webapps/manager/META-INF/context.xml || true
+RUN sed -i '/<Valve className="org.apache.catalina.valves.RemoteAddrValve"/d' $CATALINA_HOME/webapps/host-manager/META-INF/context.xml || true
 
-RUN sed -i 's/className="org.apache.catalina.valves.RemoteAddrValve" allow="127\.\d+\.\d+\.\d+|::1"/className="org.apache.catalina.valves.RemoteAddrValve" allow=".*"/' \
-    $CATALINA_HOME/webapps/host-manager/META-INF/context.xml || true
-
-RUN sed -i 's/className="org.apache.catalina.valves.RemoteAddrValve" allow="127\.\d+\.\d+\.\d+|::1"/className="org.apache.catalina.valves.RemoteAddrValve" allow=".*"/' \
-    $CATALINA_HOME/webapps/docs/META-INF/context.xml || true
-
-    
 # Expose port
 EXPOSE 8080
 
-# ✅ Copy WAR file to webapps folder
+# ✅ Deploy WAR
 COPY --from=build /app/webapp/target/webapp.war $CATALINA_HOME/webapps/webapp.war
 
 # Start Tomcat
 CMD ["catalina.sh", "run"]
+
