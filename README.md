@@ -1,5 +1,12 @@
 # 🚀 Jenkins CI/CD + Docker for Java Web App 
 
+
+This is a sample project demonstrating CI/CD pipeline using Maven, Jenkins, Docker, and EKS.
+
+## Project Architecture
+
+![Architecture Diagram](https://github.com/arumullayaswanth/maven-jenkins-cicd-docker-eks-project/blob/e2fcc40d9a5d1fb3f25dd96807b736d274f04c50/Images/image.png?raw=true)
+
 ### Objective:
 
 1. Deploy your Java (Maven) web app from GitHub to an EC2 server using Jenkins and Docker. You’ll push code → Jenkins builds WAR → Docker builds image → Runs app.
