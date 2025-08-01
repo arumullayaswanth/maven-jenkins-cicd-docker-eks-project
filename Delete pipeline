@@ -1,0 +1,70 @@
+pipeline {
+  agent any
+  environment {
+    IMAGE_NAME = 'java-webapp'
+    CONTAINER_NAME = 'java-webapp-container'
+  }
+
+  parameters {
+    booleanParam(name: 'DESTROY', defaultValue: false, description: 'Check this if you want to destroy everything (container, image, workspace)')
+  }
+
+  stages {
+    stage('Clone') {
+      when { expression { !params.DESTROY } }
+      steps {
+        git credentialsId: 'github-creds', url: 'https://github.com/arumullayaswanth/maven-jenkins-cicd-docker-eks-project.git'
+      }
+    }
+
+    stage('Maven Build') {
+      when { expression { !params.DESTROY } }
+      steps {
+        sh 'mvn clean install -pl webapp -am'
+      }
+    }
+
+    stage('Build Docker Image') {
+      when { expression { !params.DESTROY } }
+      steps {
+        sh 'docker build -t $IMAGE_NAME .'
+      }
+    }
+
+    stage('Run Container') {
+      when { expression { !params.DESTROY } }
+      steps {
+        sh '''
+          docker rm -f $CONTAINER_NAME || true
+          docker run -d -p 80:8080 --name $CONTAINER_NAME $IMAGE_NAME
+        '''
+      }
+    }
+
+    stage('Destroy Everything') {
+      when { expression { params.DESTROY } }
+      steps {
+        echo "🧨 Destroying container, image, and cleaning workspace..."
+
+        sh '''
+          echo "Stopping and removing container..."
+          docker rm -f $CONTAINER_NAME || true
+
+          echo "Removing Docker image..."
+          docker rmi -f $IMAGE_NAME || true
+
+          echo "Cleaning Jenkins workspace..."
+          rm -rf * || true
+        '''
+      }
+    }
+  }
+
+  post {
+    always {
+      echo "✅ Pipeline completed."
+    }
+  }
+}
+
+
