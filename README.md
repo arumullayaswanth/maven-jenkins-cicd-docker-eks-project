@@ -131,6 +131,10 @@ sudo systemctl start jenkins
 sudo systemctl enable jenkins
 ```
 ```bash
+sudo systemctl status jenkins
+```
+- Or, ensure jenkins runs with the new group permissions by:
+```bash
 sudo su - jenkins
 groups
 ```
@@ -139,7 +143,7 @@ groups
 ```
 http://<your-ec2-ip>:8080
 ```
-- Or, ensure jenkins runs with the new group permissions by:
+
 ```bash
 #Get the first-time password:
 
