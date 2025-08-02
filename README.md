@@ -104,15 +104,7 @@ sudo systemctl status docker
 
    ```
 
-✅ Give Jenkins Docker access:
 
-```bash
-sudo usermod -aG docker jenkins
-newgrp docker
-
-#Restart the instance (or logout and login again):
-sudo reboot
-```
 
 ---
 
@@ -133,7 +125,16 @@ sudo systemctl enable jenkins
 ```bash
 sudo systemctl status jenkins
 ```
+✅ Give Jenkins Docker access:
 
+```bash
+sudo usermod -aG docker jenkins
+id jenkins
+
+
+#Restart the instance (or logout and login again):
+sudo reboot
+```
 
 ✅ Open Jenkins in browser:
 ```
