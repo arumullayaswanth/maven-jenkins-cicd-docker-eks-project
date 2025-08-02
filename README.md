@@ -133,11 +133,7 @@ sudo systemctl enable jenkins
 ```bash
 sudo systemctl status jenkins
 ```
-- Or, ensure jenkins runs with the new group permissions by:
-```bash
-sudo su - jenkins
-groups
-```
+
 
 ✅ Open Jenkins in browser:
 ```
