@@ -20,7 +20,6 @@
       --gray-bg: #f4f4fa;
       --shadow: 0 8px 32px rgba(60, 0, 100, 0.10);
     }
-
     body {
       font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
       background: linear-gradient(110deg, #6366f1 0%, #a21caf 100%);
@@ -28,8 +27,6 @@
       min-height: 100vh;
       padding: 0;
     }
-
-    /* Header with animation and shadow */
     header {
       background: rgba(255,255,255,0.87);
       box-shadow: var(--shadow);
@@ -43,7 +40,6 @@
       from { opacity:0; transform: translateY(-40px);}
       to { opacity:1; transform: translateY(0);}
     }
-
     header h1 {
       font-size: 2.2rem;
       font-weight: 800;
@@ -53,7 +49,6 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-
     .socials {
       margin-top: 10px;
     }
@@ -73,6 +68,77 @@
       color: #fff;
       transform: scale(1.11) translateY(-2px);
     }
+    .promo-section {
+      background: rgba(255,255,255,0.93);
+      margin: 30px auto 10px auto;
+      max-width: 920px;
+      border-radius: 16px;
+      padding: 30px 30px 30px 30px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+    .promo-section h2 {
+      color: var(--primary-dark);
+      font-size: 2rem;
+      font-weight: 700;
+    }
+    .promo-section p {
+      color: #432a6e;
+      font-size: 1.16rem;
+      margin: 18px 0;
+      font-weight: 500;
+    }
+    .promo-section ul {
+      text-align: left;
+      display: inline-block;
+      margin-top: 14px;
+      margin-bottom: 14px;
+      color: #3d376e;
+      padding: 0 20px;
+      font-size: 1.13rem;
+      font-weight: 600;
+    }
+    .promo-section ul li {
+      margin-bottom: 8px;
+      font-weight: 500;
+      list-style: "✓ ";
+    }
+    .promo-actions {
+      margin-top: 20px;
+    }
+    .promo-actions a {
+      display: inline-block;
+      margin: 0 8px;
+      padding: 13px 35px;
+      font-size: 1.18rem;
+      font-weight: 700;
+      background: linear-gradient(93deg, var(--primary) 70%, var(--accent) 100%);
+      color: #fff;
+      border-radius: 9px;
+      box-shadow: 0 4px 16px #a21caf22, 0 3px var(--primary-dark);
+      text-decoration: none;
+      transition: background 0.2s, transform 0.07s;
+    }
+    .promo-actions a:hover {
+      background: var(--accent);
+      color: #f9f7fd;
+      transform: scale(1.04);
+    }
+    .promo-images {
+      margin: 23px auto 14px auto;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 18px 26px;
+    }
+    .promo-images img {
+      width: 125px;
+      height: 90px;
+      border-radius: 10px;
+      box-shadow: 0 1px 10px #b86ad844;
+      object-fit: cover;
+      background: #f4f4fa;
+    }
 
     .subscribe {
       text-align: center;
@@ -86,8 +152,6 @@
       border-radius: 10px;
       padding: 15px 0;
     }
-
-    /* Card (Form) with animation and shadow */
     .container {
       background: var(--white);
       max-width: 420px;
@@ -145,8 +209,6 @@
       border: none;
       border-bottom: 1.5px solid #e0e0fa;
     }
-
-    /* Register button: 3D press/resistance effect */
     .registerbtn {
       margin-top: 22px;
       width: 100%;
@@ -182,7 +244,6 @@
       font-size: 1.08rem;
       min-height: 1.1em;
     }
-
     .container.signin {
       margin-top: 20px;
       background: none;
@@ -200,7 +261,6 @@
       text-decoration: underline;
       color: var(--accent);
     }
-
     footer {
       text-align: center;
       color: #fff;
@@ -211,17 +271,19 @@
       letter-spacing: 0.03em;
       margin-bottom: 10px;
     }
-
-    /* Responsive adjustments */
     @media (max-width: 600px) {
       .container { max-width: 94vw; padding: 21px 6vw;}
       header { padding: 25px 0 13px 0; border-radius: 0 0 13px 13px;}
       h2 { font-size: 1.04rem;}
+      .promo-section { padding:14px 4vw; }
+      .promo-section h2 { font-size: 1.16rem;}
+      .promo-section ul { font-size: .98rem;}
+      .promo-actions a { font-size:.97rem; padding:9px 17px;}
+      .promo-images img { width:74px; height:52px;}
     }
   </style>
 </head>
 <body>
-
   <!-- HEADER -->
   <header>
     <h1>Yash Academy – Empower Your Learning Journey</h1>
@@ -233,6 +295,37 @@
     </div>
   </header>
 
+  <!-- PROMOTIONAL SECTION -->
+  <div class="promo-section">
+    <h2>🔥 Join Our YouTube Channel: <span style="color:#e52d27;"><i class="fab fa-youtube"></i> Yash Academy</span> 🔥</h2>
+    <p>
+      <b>Master DevOps, AWS, and Cloud Technologies!</b> <br>
+      Subscribe to our channel for detailed tutorials, best practices, hands-on projects, and real-world scenarios.
+    </p>
+    <div class="promo-images">
+      <!-- Replace REFERENCE_IMAGE_LINK with suitable images from Google (DevOps, AWS, Kubernetes, Jenkins, AI, etc.) -->
+      <img src="REFERENCE_IMAGE_LINK" alt="DevOps">
+      <img src="REFERENCE_IMAGE_LINK" alt="AWS">
+      <img src="REFERENCE_IMAGE_LINK" alt="Kubernetes">
+      <img src="REFERENCE_IMAGE_LINK" alt="Jenkins">
+      <img src="REFERENCE_IMAGE_LINK" alt="AI Tools">
+    </div>
+    <ul>
+      <li>🏆 <b>End-to-End DevOps Projects</b> (CI/CD, Automation, Infra-as-Code)</li>
+      <li>🚀 <b>Cloud Essentials:</b> AWS Architectures, Deployment, Best Practices</li>
+      <li>🛠️ <b>Kubernetes, Jenkins, ArgoCD, Helm Charts, Ingress, Docker</b></li>
+      <li>🤖 <b>Hands-on with AI Tools for DevOps</b></li>
+      <li>📦 <b>Terraform Automation</b> & Cloud Infrastructure</li>
+      <li>🌐 <b>Real-Time Industry Projects</b></li>
+      <li>📋 <b>Comprehensive DevOps + AWS Syllabus</b></li>
+      <li>💡 <b>Career Guidance & Interview Preparation</b></li>
+    </ul>
+    <div class="promo-actions">
+      <a href="https://www.youtube.com/@Yashacademy0" target="_blank"><i class="fab fa-youtube"></i> Subscribe Now</a>
+      <a href="mailto:yaswanth.arumulla@gmail.com" target="_blank"><i class="fa fa-envelope"></i> Contact for Courses</a>
+    </div>
+  </div>
+
   <div class="subscribe">
     📢 Don't forget to <b>Subscribe</b> on YouTube and <b>Follow</b> on GitHub, LinkedIn, and Medium!
   </div>
@@ -242,29 +335,21 @@
       <h2>Register for Free Learning Resources</h2>
       <p>Fill in your details to unlock all exclusive resources!</p>
       <hr>
-
       <label for="Name">Name</label>
       <input type="text" placeholder="Full Name" name="Name" id="Name" required autocomplete="off">
-
       <label for="mobile">Mobile</label>
       <input type="text" placeholder="Mobile Number" name="mobile" id="mobile" required maxlength="15">
-
       <label for="email">Email</label>
       <input type="text" placeholder="your@email.com" name="email" id="email" required>
-
       <label for="psw">Password</label>
       <input type="password" placeholder="Password" name="psw" id="psw" required minlength="5">
-
       <label for="psw-repeat">Repeat Password</label>
       <input type="password" placeholder="Repeat Password" name="psw-repeat" id="psw-repeat" required>
-
       <hr>
       <p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
       <button type="submit" class="registerbtn">Register</button>
-
       <div class="message" id="message"></div>
     </div>
-
     <div class="container signin">
       <p>Already have an account? <a href="#">Sign in</a></p>
     </div>
