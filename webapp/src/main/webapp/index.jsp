@@ -1530,12 +1530,12 @@
                 const message = formData.get('message').trim();
 
                 // Show success message
-                let successMessage = `🎉 Thank you, ${name}! Welcome to the Yash Academy community!<br><br>`;
+                let successMessage = '🎉 Thank you, ' + name + '! Welcome to the Yash Academy community!<br><br>';
                 
                 if (experience === 'complete-beginner') {
-                    successMessage += `🎯 Perfect! I've designed my tutorials specifically for complete beginners. Start with my "DevOps Fundamentals" playlist.<br><br>`;
+                    successMessage += '🎯 Perfect! I have designed my tutorials specifically for complete beginners. Start with my DevOps Fundamentals playlist.<br><br>';
                 } else {
-                    successMessage += `🚀 Great! Based on your ${experience} background, you'll find my advanced tutorials very helpful.<br><br>`;
+                    successMessage += '🚀 Great! Based on your ' + experience + ' background, you will find my advanced tutorials very helpful.<br><br>';
                 }
 
                 if (interest) {
@@ -1548,15 +1548,15 @@
                         'monitoring': 'Monitoring & Observability',
                         'everything': 'Complete DevOps'
                     };
-                    successMessage += `📚 I'll prioritize creating more content on <strong>${interestMap[interest]}</strong> based on your interest!<br><br>`;
+                    successMessage += '📚 I will prioritize creating more content on <strong>' + interestMap[interest] + '</strong> based on your interest!<br><br>';
                 }
 
-                successMessage += `📺 <strong>Next Steps:</strong><br>
-                    1. Subscribe to my YouTube channel for new tutorials<br>
-                    2. Check out my GitHub for project source code<br>
-                    3. Connect with me on LinkedIn for career guidance<br>
-                    4. Follow my Medium blog for in-depth articles<br><br>
-                    🎯 I'll be creating more content based on community feedback. Thank you for joining!`;
+                successMessage += '📺 <strong>Next Steps:</strong><br>' +
+                    '1. Subscribe to my YouTube channel for new tutorials<br>' +
+                    '2. Check out my GitHub for project source code<br>' +
+                    '3. Connect with me on LinkedIn for career guidance<br>' +
+                    '4. Follow my Medium blog for in-depth articles<br><br>' +
+                    '🎯 I will be creating more content based on community feedback. Thank you for joining!';
 
                 showMessage(successMessage, 'success');
                 
@@ -1564,21 +1564,21 @@
                 this.reset();
 
                 // Redirect to YouTube after 5 seconds
-                setTimeout(() => {
+                setTimeout(function() {
                     window.open('https://www.youtube.com/@Yashacademy0', '_blank');
                 }, 5000);
             });
 
             function showMessage(text, type) {
                 messageDiv.innerHTML = text;
-                messageDiv.className = `message ${type}`;
+                messageDiv.className = 'message ' + type;
                 messageDiv.style.display = 'block';
                 
                 // Scroll to message
                 messageDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
                 // Auto hide after 10 seconds
-                setTimeout(() => {
+                setTimeout(function() {
                     messageDiv.style.display = 'none';
                 }, 10000);
             }
@@ -1599,12 +1599,12 @@
                 lastScrollTop = scrollTop;
             });
 
-            // All YouTube/external links
-            const youtubeButtons = document.querySelectorAll('a[href*="youtube.com"], a[href*="linkedin.com"], a[href*="github.com"], a[href*="medium.com"]');
-            youtubeButtons.forEach(button => {
+            // All external links
+            const externalButtons = document.querySelectorAll('a[href*="youtube.com"], a[href*="linkedin.com"], a[href*="github.com"], a[href*="medium.com"]');
+            externalButtons.forEach(function(button) {
                 button.addEventListener('click', function(e) {
                     // Let the default behavior happen (opening in new tab)
-                    console.log(`User clicked: ${this.href}`);
+                    console.log('User clicked: ' + button.href);
                 });
             });
         });
