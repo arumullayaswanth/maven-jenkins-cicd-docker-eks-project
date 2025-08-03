@@ -4,25 +4,54 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Yash Academy Registration</title>
+  <title>Yash Academy - Learn, Grow, Excel</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #667eea, #764ba2);
       margin: 0;
       padding: 0;
     }
 
-    .container {
-      background-color: #fff;
-      margin: 50px auto;
-      padding: 30px;
-      border-radius: 10px;
-      width: 400px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    header {
+      background-color: white;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
 
-    h1 {
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+      color: #333;
+    }
+
+    .socials {
+      margin-top: 10px;
+    }
+
+    .socials a {
+      margin: 0 10px;
+      text-decoration: none;
+      color: #555;
+      font-size: 24px;
+      transition: color 0.3s;
+    }
+
+    .socials a:hover {
+      color: #4CAF50;
+    }
+
+    .container {
+      background-color: white;
+      max-width: 500px;
+      margin: 30px auto;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+
+    h2 {
       text-align: center;
       color: #333;
     }
@@ -36,34 +65,42 @@
     input[type=text], input[type=password] {
       width: 100%;
       padding: 10px;
-      margin-top: 5px;
+      margin-top: 6px;
       border: 1px solid #ccc;
       border-radius: 5px;
+      transition: 0.3s;
+    }
+
+    input[type=text]:focus, input[type=password]:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 5px rgba(102, 126, 234, 0.5);
+      outline: none;
     }
 
     .registerbtn {
-      background-color: #4CAF50;
+      background-color: #667eea;
       color: white;
       padding: 12px;
       margin-top: 20px;
       width: 100%;
       border: none;
-      border-radius: 5px;
-      cursor: pointer;
+      border-radius: 8px;
       font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
     }
 
     .registerbtn:hover {
-      background-color: #45a049;
+      background-color: #5a67d8;
     }
 
     .signin {
       text-align: center;
-      margin-top: 20px;
+      margin-top: 25px;
     }
 
     a {
-      color: #4CAF50;
+      color: #667eea;
       text-decoration: none;
     }
 
@@ -72,8 +109,7 @@
     }
 
     hr {
-      margin-top: 20px;
-      margin-bottom: 20px;
+      margin: 20px 0;
     }
 
     .message {
@@ -82,14 +118,44 @@
       color: green;
       margin-top: 20px;
     }
+
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      color: white;
+      font-size: 18px;
+    }
+
+    .subscribe {
+      text-align: center;
+      margin-top: 30px;
+      color: white;
+      font-size: 20px;
+      font-weight: bold;
+    }
   </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
+  <header>
+    <h1>Yash Academy - Empower Your Learning Journey</h1>
+    <div class="socials">
+      <a href="https://www.youtube.com/@Yashacademy0" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+      <a href="https://github.com/arumullayaswanth" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/yaswanth-arumulla/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+      <a href="https://medium.com/@yaswanth.arumulla" target="_blank" title="Medium"><i class="fab fa-medium"></i></a>
+    </div>
+  </header>
+
+  <div class="subscribe">
+    📢 Don't forget to <strong>Subscribe</strong> on YouTube and <strong>Follow</strong> me on GitHub, LinkedIn, and Medium!
+  </div>
+
   <form id="registrationForm">
     <div class="container">
-      <h1>Welcome to Yash Academy YouTube Channel</h1>
-      <p>Please fill in this form to create an account.</p>
+      <h2>Register for Free Learning Resources</h2>
+      <p>Please fill in this form to create your account.</p>
       <hr>
 
       <label for="Name"><b>Enter Name</b></label>
@@ -110,17 +176,18 @@
       <hr>
       <p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
       <button type="submit" class="registerbtn">Register</button>
+
+      <div class="message" id="message"></div>
     </div>
 
     <div class="container signin">
       <p>Already have an account? <a href="#">Sign in</a>.</p>
     </div>
-
-    <div class="message" id="message"></div>
-
-    <h1 style="text-align:center;">Thank You, Happy Learning</h1>
-    <h1 style="text-align:center;">See You Again</h1>
   </form>
+
+  <footer>
+    <p>Thank You 🙏 — Keep Learning with Yash Academy!</p>
+  </footer>
 
   <script>
     document.getElementById("registrationForm").addEventListener("submit", function(event) {
@@ -133,11 +200,11 @@
       const repeatPassword = document.getElementById("psw-repeat").value;
 
       if (password !== repeatPassword) {
-        alert("Passwords do not match!");
+        alert("❌ Passwords do not match!");
         return;
       }
 
-      document.getElementById("message").innerText = "Registration successful! Welcome, " + name + " 🎉";
+      document.getElementById("message").innerText = "🎉 Registration successful! Welcome, " + name + "!";
       document.getElementById("registrationForm").reset();
     });
   </script>
