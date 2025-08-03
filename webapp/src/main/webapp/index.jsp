@@ -1,137 +1,231 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Yash Academy | Learn & Grow</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yash Academy – Learn, Grow, Excel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Font and Icons -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <!-- FontAwesome for social icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Inter:400,600,800&display=swap" rel="stylesheet">
 
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      margin: 0;
-      background: #f5f6fa;
-      color: #333;
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4338ca;
+      --accent: #a21caf;
+      --white: #fff;
+      --gray-bg: #f4f4fa;
+      --shadow: 0 8px 32px rgba(60, 0, 100, 0.10);
     }
 
+    body {
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(110deg, #6366f1 0%, #a21caf 100%);
+      margin: 0;
+      min-height: 100vh;
+      padding: 0;
+    }
+
+    /* Header with animation and shadow */
     header {
-      background: #1e1e2f;
-      color: white;
-      padding: 20px 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
+      background: rgba(255,255,255,0.87);
+      box-shadow: var(--shadow);
+      padding: 36px 0 22px 0;
+      border-radius: 0 0 24px 24px;
+      text-align: center;
+      margin-bottom: 18px;
+      animation: fadeInDown 1s both;
+    }
+    @keyframes fadeInDown {
+      from { opacity:0; transform: translateY(-40px);}
+      to { opacity:1; transform: translateY(0);}
     }
 
     header h1 {
-      font-size: 26px;
+      font-size: 2.2rem;
+      font-weight: 800;
       margin: 0;
+      color: var(--primary-dark);
+      background: linear-gradient(90deg, #6366f1 40%, #a21caf 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
-    .social-icons a {
-      color: white;
-      margin-left: 15px;
-      font-size: 20px;
-      text-decoration: none;
+    .socials {
+      margin-top: 10px;
+    }
+    .socials a {
+      margin: 0 7px;
+      color: var(--primary-dark);
+      font-size: 1.6rem;
+      background: #efeffa;
+      border-radius: 50%;
+      padding: 10px;
+      transition: background 0.3s, color 0.3s, transform 0.2s;
+      box-shadow: 0 2px 8px #a21caf11;
+      display: inline-block;
+    }
+    .socials a:hover {
+      background: var(--primary);
+      color: #fff;
+      transform: scale(1.11) translateY(-2px);
     }
 
-    .hero {
-      background: linear-gradient(to right, #667eea, #764ba2);
-      color: white;
+    .subscribe {
       text-align: center;
-      padding: 50px 20px 30px;
+      margin-bottom: 22px;
+      color: #fff;
+      font-size: 1.17rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-shadow: 0 2px 8px #432a6e66;
+      background: rgba(60,0,100,0.08);
+      border-radius: 10px;
+      padding: 15px 0;
     }
 
-    .hero h2 {
-      font-size: 36px;
-      margin-bottom: 10px;
-    }
-
-    .hero p {
-      font-size: 18px;
-    }
-
+    /* Card (Form) with animation and shadow */
     .container {
-      max-width: 500px;
-      background: white;
-      margin: -40px auto 30px;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      background: var(--white);
+      max-width: 420px;
+      margin: 28px auto 0 auto;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 38px 32px 25px 32px;
+      animation: fadeInUp 1.1s both;
     }
-
+    @keyframes fadeInUp {
+      from { opacity:0; transform: translateY(34px);}
+      to { opacity:1; transform: none;}
+    }
+    h2 {
+      color: var(--primary-dark);
+      font-size: 1.38rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: 0.02em;
+      text-align: center;
+    }
+    p {
+      color: #686eaa;
+      text-align: center;
+      font-size: 1rem;
+      margin-bottom: 16px;
+    }
     label {
       display: block;
-      margin: 15px 0 5px;
-      font-weight: 500;
+      margin-top: 14px;
+      font-weight: 600;
+      color: #3d376e;
+      letter-spacing: 0.01em;
+      font-size: 1rem;
     }
-
     input[type=text], input[type=password] {
       width: 100%;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+      background: var(--gray-bg);
+      border: 1.5px solid #d1d9fc;
+      border-radius: 7px;
+      padding: 9.5px 13px;
+      margin-top: 7px;
+      font-size: 1rem;
+      transition: border 0.35s;
       box-sizing: border-box;
+      font-family: inherit;
     }
-
-    .registerbtn {
-      background: #667eea;
-      color: white;
+    input:focus {
+      outline: none;
+      border: 2px solid var(--accent);
+      background: #eae6fc;
+    }
+    hr {
+      margin: 1.5em 0;
       border: none;
-      padding: 12px;
+      border-bottom: 1.5px solid #e0e0fa;
+    }
+
+    /* Register button: 3D press/resistance effect */
+    .registerbtn {
+      margin-top: 22px;
       width: 100%;
-      font-size: 16px;
-      border-radius: 6px;
-      margin-top: 20px;
+      padding: 13px 0;
+      background: linear-gradient(93deg, var(--primary) 70%, var(--accent) 100%);
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.18rem;
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px #a21caf22, 0 3px var(--primary-dark);
       cursor: pointer;
-      transition: 0.3s ease;
+      transition: transform 0.06s cubic-bezier(.7,2,0,1), box-shadow 0.16s, background 0.26s;
+      will-change: transform, box-shadow;
+      font-family: inherit;
+      letter-spacing: 0.03em;
+      position: relative;
     }
-
-    .registerbtn:hover {
-      background: #5a67d8;
+    .registerbtn:active {
+      transform: translateY(4px) scale(0.97);
+      box-shadow: 0 1px 4px #764ba244, 0 0px var(--primary-dark);
+      filter: brightness(0.98);
     }
-
-    .signin {
+    .registerbtn:focus {
+      outline: 2px solid var(--accent);
+    }
+    .message {
       text-align: center;
+      color: #34a853;
       margin-top: 20px;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+      font-size: 1.08rem;
+      min-height: 1.1em;
+    }
+
+    .container.signin {
+      margin-top: 20px;
+      background: none;
+      box-shadow: none;
+      padding: 0;
+      text-align: center;
+    }
+    .container.signin p,a {
+      color: var(--primary-dark);
+      font-size: 1.04rem;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+    }
+    .container.signin a:hover {
+      text-decoration: underline;
+      color: var(--accent);
     }
 
     footer {
       text-align: center;
-      padding: 20px;
-      background: #1e1e2f;
-      color: white;
-      font-size: 14px;
+      color: #fff;
+      margin-top: 70px;
+      font-size: 1.13rem;
+      text-shadow: 0 2px 14px #4a247a66;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      margin-bottom: 10px;
     }
 
-    .message {
-      text-align: center;
-      color: green;
-      margin-top: 20px;
-    }
-
+    /* Responsive adjustments */
     @media (max-width: 600px) {
-      .hero h2 {
-        font-size: 28px;
-      }
-      header {
-        flex-direction: column;
-        text-align: center;
-      }
+      .container { max-width: 94vw; padding: 21px 6vw;}
+      header { padding: 25px 0 13px 0; border-radius: 0 0 13px 13px;}
+      h2 { font-size: 1.04rem;}
     }
   </style>
 </head>
 <body>
 
+  <!-- HEADER -->
   <header>
-    <h1>Yash Academy</h1>
-    <div class="social-icons">
+    <h1>Yash Academy – Empower Your Learning Journey</h1>
+    <div class="socials">
       <a href="https://www.youtube.com/@Yashacademy0" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
       <a href="https://github.com/arumullayaswanth" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
       <a href="https://www.linkedin.com/in/yaswanth-arumulla/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
@@ -139,65 +233,67 @@
     </div>
   </header>
 
-  <div class="hero">
-    <h2>Learn. Build. Grow.</h2>
-    <p>Join our community of developers and learners 🚀</p>
+  <div class="subscribe">
+    📢 Don't forget to <b>Subscribe</b> on YouTube and <b>Follow</b> on GitHub, LinkedIn, and Medium!
   </div>
 
-  <form id="registrationForm">
+  <form id="registrationForm" autocomplete="off">
     <div class="container">
-      <h3 style="text-align:center;">Register Now</h3>
-      <label for="Name">Full Name</label>
-      <input type="text" id="Name" name="Name" required>
+      <h2>Register for Free Learning Resources</h2>
+      <p>Fill in your details to unlock all exclusive resources!</p>
+      <hr>
 
-      <label for="mobile">Mobile Number</label>
-      <input type="text" id="mobile" name="mobile" required>
+      <label for="Name">Name</label>
+      <input type="text" placeholder="Full Name" name="Name" id="Name" required autocomplete="off">
 
-      <label for="email">Email Address</label>
-      <input type="text" id="email" name="email" required>
+      <label for="mobile">Mobile</label>
+      <input type="text" placeholder="Mobile Number" name="mobile" id="mobile" required maxlength="15">
+
+      <label for="email">Email</label>
+      <input type="text" placeholder="your@email.com" name="email" id="email" required>
 
       <label for="psw">Password</label>
-      <input type="password" id="psw" name="psw" required>
+      <input type="password" placeholder="Password" name="psw" id="psw" required minlength="5">
 
       <label for="psw-repeat">Repeat Password</label>
-      <input type="password" id="psw-repeat" name="psw-repeat" required>
+      <input type="password" placeholder="Repeat Password" name="psw-repeat" id="psw-repeat" required>
 
-      <p style="font-size:13px; margin-top:10px;">By registering, you agree to our <a href="#">Terms & Conditions</a>.</p>
-
+      <hr>
+      <p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
       <button type="submit" class="registerbtn">Register</button>
 
       <div class="message" id="message"></div>
     </div>
 
     <div class="container signin">
-      <p>Already have an account? <a href="#">Sign in</a>.</p>
+      <p>Already have an account? <a href="#">Sign in</a></p>
     </div>
   </form>
 
   <footer>
-    <p>📢 Don’t forget to <strong>Subscribe</strong> on YouTube and <strong>Follow</strong> me on GitHub, LinkedIn, and Medium!</p>
-    <p>© 2025 Yaswanth Arumulla | All Rights Reserved</p>
+    Thank You 🙏 — Keep Learning with Yash Academy!
   </footer>
 
-  <script>
-    document.getElementById("registrationForm").addEventListener("submit", function(event) {
-      event.preventDefault();
+<script>
+  // Form feedback
+  document.getElementById("registrationForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    const name = document.getElementById("Name").value.trim();
+    const mobile = document.getElementById("mobile").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("psw").value;
+    const repeatPassword = document.getElementById("psw-repeat").value;
 
-      const name = document.getElementById("Name").value;
-      const mobile = document.getElementById("mobile").value;
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("psw").value;
-      const repeatPassword = document.getElementById("psw-repeat").value;
+    if (password !== repeatPassword) {
+      document.getElementById("message").style.color = "crimson";
+      document.getElementById("message").innerText = "❌ Passwords do not match!";
+      return;
+    }
 
-      if (password !== repeatPassword) {
-        alert("Passwords do not match!");
-        return;
-      }
-
-      document.getElementById("message").innerText = "🎉 Welcome " + name + "! You're registered successfully.";
-      document.getElementById("registrationForm").reset();
-    });
-  </script>
-
+    document.getElementById("message").style.color = "#34a853";
+    document.getElementById("message").innerHTML = "🎉 Registration successful!<br>Welcome, <b>" + name + "</b>!";
+    document.getElementById("registrationForm").reset();
+  });
+</script>
 </body>
 </html>
