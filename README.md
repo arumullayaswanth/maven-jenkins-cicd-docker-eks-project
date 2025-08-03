@@ -251,6 +251,8 @@ In browser:
 ```
 http://<your-ec2-ip>
 ```
+user:admin 
+password: admin
 
 🎉 You’ll see your `index.jsp` from the WAR file running inside Tomcat + Docker!
 
