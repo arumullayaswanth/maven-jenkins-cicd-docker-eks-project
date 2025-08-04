@@ -637,3 +637,9 @@ kubectl get namespaces
 4. Click **Create**.
 
 
+open project---->open regapp-service--->copy HOSTNAMES--->ex: a8edd996b9c644bc198d76b97389819f-2076512840.us-east-2.elb.amazonaws.com---->paste in google in this link and click manager app--->
+
+user:admin 
+password: admin
+---> click /webapp   now you can see tomcat application
+
