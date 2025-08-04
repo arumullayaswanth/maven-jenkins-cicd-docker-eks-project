@@ -637,9 +637,79 @@ kubectl get namespaces
 4. Click **Create**.
 
 
-open project---->open regapp-service--->copy HOSTNAMES--->ex: a8edd996b9c644bc198d76b97389819f-2076512840.us-east-2.elb.amazonaws.com---->paste in google in this link and click manager app--->
+---
 
-user:admin 
-password: admin
----> click /webapp   now you can see tomcat application
+## ✅ Access Tomcat App from ArgoCD
+
+---
+
+### **1. Open ArgoCD Dashboard**
+
+* Go to your **ArgoCD Web UI** (usually something like: `http://<argocd-domain>`).
+* Log in with your ArgoCD credentials.
+
+---
+
+### **2. Select Your Project**
+
+* In the left panel, click on **`Applications`**.
+* Find and click on your project (e.g., `regapp-service`).
+
+---
+
+### **3. Copy the Load Balancer Hostname**
+
+* In the Application view:
+
+  * Scroll down to see **Services**.
+  * Look for the service of type **`LoadBalancer`**.
+  * You’ll see the **EXTERNAL-IP or HOSTNAME** (e.g.):
+
+    ```
+    a8edd996b9c644bc198d76b97389819f-2076512840.us-east-2.elb.amazonaws.com
+    ```
+
+---
+
+### **4. Paste the Hostname in Your Browser**
+
+* Open a new tab in your browser.
+* Visit:
+
+  ```
+  http://a8edd996b9c644bc198d76b97389819f-2076512840.us-east-2.elb.amazonaws.com
+  ```
+
+---
+
+### **5. Click on “Manager App”**
+
+* You will see the **Apache Tomcat homepage**.
+* Click the **“Manager App”** link.
+
+---
+
+### **6. Enter Tomcat Credentials**
+
+* When prompted, enter:
+
+  ```
+  Username: admin
+  Password: admin
+  ```
+
+> ⚠️ If login fails, the credentials must be configured in `tomcat-users.xml` inside your container image or Kubernetes `ConfigMap`.
+
+---
+
+### **7. Access Your App**
+
+* After successful login, scroll to **“Applications”** section.
+* Click the `/webapp` link.
+* You will be taken to your **Tomcat application page**.
+
+---
+
+✅ **You are now viewing your deployed application!**
+
 
