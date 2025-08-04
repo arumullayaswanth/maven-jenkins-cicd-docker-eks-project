@@ -416,6 +416,12 @@ pipeline {
                 sh 'ls -la' // verfy files after checkout
             }
         }
+        // ⭐️ Added Maven Build stage
+        stage('Maven Build') {
+            steps {
+                sh 'mvn clean package -DskipTests'
+            }
+        }
 
         // no change in this stage Except dir name=dir('frontend'
         stage("Docker Image Build") {
