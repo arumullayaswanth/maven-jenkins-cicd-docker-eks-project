@@ -141,8 +141,8 @@ sudo yum install git -y
 sudo yum install docker -y
 sudo systemctl start docker
 sudo systemctl enable docker
-sudo usermod -aG docker jenkins
-sudo usermod -aG docker ec2-user
+sudo reboot
+
 ```
 
 ```bash
@@ -384,67 +384,80 @@ Repository URI: 483216680875.dkr.ecr.us-east-1.amazonaws.com/demo
 ```groovy
 pipeline {
     agent any // 🖥️ Use any available Jenkins agent (node) to run the pipeline
-    environment  {
-        AWS_ACCOUNT_ID = '242201296943'                   // replace AWS account ID
-        AWS_ECR_REPO_NAME = 'demo'                      //replace ECR repository name
-        AWS_DEFAULT_REGION = 'us-east-2'                 // replace AWS region
+
+    environment {
+        AWS_ACCOUNT_ID = '242201296943'   // replace AWS account ID
+        AWS_ECR_REPO_NAME = 'demo'         // replace AWS account ID
+        AWS_DEFAULT_REGION = 'us-east-2'   // replace AWS region
         REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-        GIT_REPO_NAME = "maven-jenkins-cicd-docker-eks-project"      // replace your github rep name
-        GIT_EMAIL = "yaswanth.arumulla@gmail.com"    //replacr your email id
-        GIT_USER_NAME = "arumullayaswanth"           // replace your user name
+        GIT_REPO_NAME = "maven-jenkins-cicd-docker-eks-project"  // replace your github rep name
+        GIT_EMAIL = "yaswanth.arumulla@gmail.com"          //replacr your email id
+        GIT_USER_NAME = "arumullayaswanth"            // replace your user name
         YAML_FILE = "deploy_svc.yml"
     }
+
     stages {
-        // no change in this stage
+         // no change in this stage
+
         stage('Cleaning Workspace') {
             steps {
-                cleanWs()         // Clears the workspace before starting the build (removes old files)
+                cleanWs()
             }
         }
 
-        // change rep name 
         stage('Checkout from Git') {
             steps {
-                // Clones the 'master' branch of your GitHub repository
                 git branch: 'master', url: 'https://github.com/arumullayaswanth/maven-jenkins-cicd-docker-eks-project.git'
             }
         }
-
         // no change in this stage
         stage("List Files") {
             steps {
-                sh 'ls -la' // verfy files after checkout
+                sh 'ls -la'
             }
         }
-        // ⭐️ Added Maven Build stage
-        stage('Maven Build') {
+         // no change in this stage
+        stage('Maven Build & Test') {
             steps {
-                sh 'mvn clean package -DskipTests'
+                sh 'mvn clean verify'
+            }
+            post {
+                always {
+                    junit '**/target/surefire-reports/*.xml'
+                }
+                success {
+                    archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
+                }
             }
         }
 
-        // no change in this stage Except dir name=dir('frontend'
+         // no change in this stage
+        stage('Test Docker Access') {
+            steps {
+                sh 'docker --version && docker ps'
+            }
+        }
+         // no change in this stage
         stage("Docker Image Build") {
             steps {
                 script {
-                    sh 'docker system prune -f'              // Removes unused Docker data (containers, images, etc.)
-                    sh 'docker container prune -f'           // Specifically removes all stopped containers
-                    sh 'docker build -t ${AWS_ECR_REPO_NAME} .'   // Builds Docker image with the tag 'frontend' from Dockerfile in current dir
+                    sh 'docker system prune -f'
+                    sh 'docker container prune -f'
+                    sh 'docker build -t ${AWS_ECR_REPO_NAME} .'
                 }
             }
         }
-
-        // no change in this stage
+         // no change in this stage
         stage("ECR Image Pushing") {
             steps {
                 script {
-                        sh 'aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${REPOSITORY_URI}'
-                        sh 'docker tag ${AWS_ECR_REPO_NAME}:latest ${REPOSITORY_URI}/${AWS_ECR_REPO_NAME}:${BUILD_NUMBER}'
-                        sh 'docker push ${REPOSITORY_URI}/${AWS_ECR_REPO_NAME}:${BUILD_NUMBER}'
+                    sh 'aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${REPOSITORY_URI}'
+                    sh 'docker tag ${AWS_ECR_REPO_NAME}:latest ${REPOSITORY_URI}/${AWS_ECR_REPO_NAME}:${BUILD_NUMBER}'
+                    sh 'docker push ${REPOSITORY_URI}/${AWS_ECR_REPO_NAME}:${BUILD_NUMBER}'
                 }
             }
         }
-        // no change in this stage Except dir name=dir('kubernetes-files')
+        // no change in this stage Except dir name=dir('Kubernetes-Manifests-file'')
         stage('Update Deployment file') {
             steps {
                 dir('Kubernetes-Manifests-file') {
@@ -456,13 +469,11 @@ pipeline {
                             BUILD_NUMBER=${BUILD_NUMBER}
                             echo $BUILD_NUMBER
 
-                            # push this image to your git hub
                             sed -i "s#image:.*#image: ${REPOSITORY_URI}/${AWS_ECR_REPO_NAME}:$BUILD_NUMBER#g" ${YAML_FILE}
 
                             git add ${YAML_FILE}
                             git commit -m "Update ${AWS_ECR_REPO_NAME} Image to version \${BUILD_NUMBER}"
                             git push https://${git_token}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:master
-        
                         '''
                     }
                 }
@@ -470,6 +481,7 @@ pipeline {
         }
     }
 }
+
 
 ```
 
