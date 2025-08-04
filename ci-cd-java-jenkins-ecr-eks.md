@@ -328,7 +328,8 @@ eksctl get cluster --region us-east-2
   To delete your EKS cluster and all associated resources, use the following command:
 
 ```sh
-  eksctl devops-cluster --name my-cluster --region us-east-2
+eksctl delete cluster --name devops-cluster --region us-east-2
+
 ```
 
 ---
