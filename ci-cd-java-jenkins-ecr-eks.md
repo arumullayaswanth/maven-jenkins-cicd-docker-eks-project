@@ -141,7 +141,17 @@ sudo yum install git -y
 sudo yum install docker -y
 sudo systemctl start docker
 sudo systemctl enable docker
-sudo reboot
+# Make sure the docker group exists
+sudo groupadd docker || true
+
+# Add ec2-user to docker group
+sudo usermod -aG docker ec2-user
+newgrp docker
+
+sudo chown root:docker /var/run/docker.sock
+sudo chmod 660 /var/run/docker.sock
+docker ps
+
 
 ```
 
